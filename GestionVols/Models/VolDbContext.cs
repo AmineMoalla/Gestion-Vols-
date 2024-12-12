@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionVols.Models
 {
-    public class VolDbContext : DbContext
+    public class VolDbContext : IdentityDbContext<ApplicationUser>
     {
         public VolDbContext(DbContextOptions options) : base(options)
         {

@@ -4,6 +4,7 @@ using GestionVols.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionVols.Migrations
 {
     [DbContext(typeof(VolDbContext))]
-    partial class VolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241211233913_vol")]
+    partial class vol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,6 +229,12 @@ namespace GestionVols.Migrations
                     b.Property<int>("IdAeroportDepart")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdAvion")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NbreReservée")
+                        .HasColumnType("int");
+
                     b.Property<string>("NumeroVol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -247,6 +256,8 @@ namespace GestionVols.Migrations
                     b.HasIndex("IdAeroportArrivee");
 
                     b.HasIndex("IdAeroportDepart");
+
+                    b.HasIndex("IdAvion");
 
                     b.ToTable("Vols");
                 });
@@ -417,9 +428,17 @@ namespace GestionVols.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("GestionVols.Models.Avion", "Avion")
+                        .WithMany()
+                        .HasForeignKey("IdAvion")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AeroportArrivee");
 
                     b.Navigation("AeroportDepart");
+
+                    b.Navigation("Avion");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

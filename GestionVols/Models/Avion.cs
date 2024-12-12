@@ -7,6 +7,7 @@ namespace GestionVols.Models
         [Key]
         public int IdAvion { get; set; }
         public string TypeAvion { get; set; }
+
         [Required]
         public int CapaciteAvion { get; set; }
         public string FabriquantAvion { get; set; }

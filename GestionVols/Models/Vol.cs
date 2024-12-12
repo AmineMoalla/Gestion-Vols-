@@ -24,5 +24,12 @@ namespace GestionVols.Models
          public  Aeroport? AeroportDepart { get; set; }
          public  Aeroport? AeroportArrivee { get; set; }
 
+        //[ForeignKey(nameof(Avion))] 
+        
+        //public int IdAvion { get; set; } 
+        // public Avion? Avion { get; set; }
+
+        //public int NbreReservée { get; set; }
+
     }
 }
