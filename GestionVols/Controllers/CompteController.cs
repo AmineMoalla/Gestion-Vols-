@@ -28,6 +28,7 @@ namespace GestionVols.Controllers
         {
             if (!ModelState.IsValid) 
             { return BadRequest(ModelState); }
+            
             var user = await userManager.FindByNameAsync(registerDTO.UserName); 
             if (user != null) { 
                 return BadRequest("Utilisateur existe"); }
@@ -37,6 +38,8 @@ namespace GestionVols.Controllers
             if (!result.Succeeded) {
                 return BadRequest(result.Errors); } 
             // Ajouter l'utilisateur au rôle "Utilisateur" par défaut
+         
+            
             await userManager.AddToRoleAsync(applicationUser, "Utilisateur");
 
             return Ok("Utilisateur créé avec succès"); }
