@@ -112,6 +112,29 @@ namespace GestionVols.Controllers
             }
         }
 
+        [HttpPost("search")]
+        [AllowAnonymous] // Allow non-admin users to search
+        public async Task<IActionResult> SearchFlights([FromBody] RechercheVolRequest request)
+        {
+            try
+            {
+                // Validate input
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var flights = await repos.RechercheVol(request);
+
+                if (flights == null || !flights.Any())
+                    return NotFound("Aucun vol trouvé pour les critères donnés.");
+
+                return Ok(flights);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
 
 

@@ -41,8 +41,9 @@ namespace GestionVols.Controllers
          
             
             await userManager.AddToRoleAsync(applicationUser, "Utilisateur");
-
-            return Ok("Utilisateur créé avec succès"); }
+            return Ok(new { message = "Utilisateur créé avec succès" });
+            //return Ok("Utilisateur créé avec succès"); 
+        }
 
             [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
@@ -83,6 +84,7 @@ namespace GestionVols.Controllers
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo,
                             username = loginDTO.UserName,
+                            roles = roles.FirstOrDefault()
                         };
 
                         return Ok(_token);

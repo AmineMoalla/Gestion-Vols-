@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestionVols.Models.Repos
@@ -86,7 +87,29 @@ namespace GestionVols.Models.Repos
             context.Vols.Update(vol);
             await context.SaveChangesAsync();
         }
-      
+
+        public async Task<List<Vol>> RechercheVol(RechercheVolRequest request)
+        {
+             var query = context.Vols
+                .Include(v => v.AeroportDepart)
+                .Include(v => v.AeroportArrivee)
+                .AsQueryable();
+ 
+            if (!string.IsNullOrEmpty(request.Depart))
+                query = query.Where(v => v.AeroportDepart.NomAeroport == request.Depart);
+
+            if (!string.IsNullOrEmpty(request.Destination))
+                query = query.Where(v => v.AeroportArrivee.NomAeroport == request.Destination);
+
+            if (request.DateDepart.HasValue)
+                query = query.Where(v => v.HeureDepart.Date == request.DateDepart.Value.Date);
+
+            if (request.DateRetour.HasValue)
+                query = query.Where(v => v.HeureArrivee.Date == request.DateRetour.Value.Date);
+  
+            return await query.ToListAsync();
+        }
+
 
 
     }
