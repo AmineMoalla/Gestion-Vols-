@@ -6,7 +6,8 @@
         Task<Reservation> GetReservationById(int id); 
         Task<Reservation> AddReservation(Reservation reservation);
         Task UpdateReservation(Reservation reservation);  
-        Task DeleteReservation(int id); 
+        Task DeleteReservation(int id);
+        Task<List<Reservation>> GetHistoriqueReservationByPassager(int passagerId);
 
     }
 }

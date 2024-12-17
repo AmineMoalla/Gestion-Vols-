@@ -84,7 +84,8 @@ namespace GestionVols.Controllers
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo,
                             username = loginDTO.UserName,
-                            roles = roles.FirstOrDefault()
+                            roles = roles.FirstOrDefault(), 
+                             
                         };
 
                         return Ok(_token);
@@ -114,8 +115,9 @@ namespace GestionVols.Controllers
                     user.Id,
                     user.UserName,
                     user.Email,
-                    Roles = roles
-                });
+                    Roles = roles,
+                    
+            });
             }
 
             return Ok(userList);

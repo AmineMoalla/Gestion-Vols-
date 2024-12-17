@@ -80,7 +80,13 @@ namespace GestionVols.Controllers
                 res.IdVol=reservation.IdVol;
                 res.DateReservation=reservation.DateReservation;
                 res.StatutReservation = reservation.StatutReservation;
-                res.PrixReservation=reservation.PrixReservation;
+//recalcul apres edit a verifier 
+
+                //if (res.TypeClasse != reservation.TypeClasse || res.NbrePassagers != reservation.NbrePassagers)
+                //{
+                //    var totalPrice = repos.CalculatePrixReservationTotal(reservation.IdVol, reservation.ClassType, reservation.NumberOfPassengers);
+                //    res.PrixReservationTotal = totalPrice;
+                //}
 
                 await repos.UpdateReservation(res);
                 return Ok("Reservation modifié avec succès");
@@ -108,5 +114,17 @@ namespace GestionVols.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+        [HttpGet("historique/{passagerId}")]
+        public async Task<IActionResult> GetHistoriqueReservation(int passagerId)
+        {
+            var reservations = await repos.GetHistoriqueReservationByPassager(passagerId);
+            if (reservations == null || !reservations.Any())
+            {
+                return NotFound("Aucune réservation trouvée pour ce passager.");
+            }
+
+            return Ok(reservations);
+        }
+
     }
 }

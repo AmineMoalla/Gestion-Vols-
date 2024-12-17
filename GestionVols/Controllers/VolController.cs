@@ -113,19 +113,19 @@ namespace GestionVols.Controllers
         }
 
         [HttpPost("search")]
-        [AllowAnonymous] // Allow non-admin users to search
+        [AllowAnonymous]  
         public async Task<IActionResult> SearchFlights([FromBody] RechercheVolRequest request)
         {
             try
             {
-                // Validate input
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
+ 
                 var flights = await repos.RechercheVol(request);
 
                 if (flights == null || !flights.Any())
-                    return NotFound("Aucun vol trouvé pour les critères donnés.");
+                    return NotFound("No flights found matching the search criteria.");
 
                 return Ok(flights);
             }

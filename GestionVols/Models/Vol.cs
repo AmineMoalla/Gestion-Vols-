@@ -26,10 +26,23 @@ namespace GestionVols.Models
 
         [ForeignKey(nameof(Avion))]
 
-        public int? IdAvion { get; set; }
+        public int? IdAvion { get; set; }   
         public Avion? Avion { get; set; }
 
         public int NbreReservée { get; set; }
+ 
+        public decimal PrixVol { get; set; } // prixx parr ticket pour un vol
+        public int PlacesDisponibles
+        {
+            get
+            {
+                if (Avion != null)
+                {
+                    return Avion.CapaciteAvion - NbreReservée;
+                }
+                return 0;  
+            }
+        }
 
     }
 }

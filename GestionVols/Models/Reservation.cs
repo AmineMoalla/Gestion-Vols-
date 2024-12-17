@@ -26,7 +26,14 @@ namespace GestionVols.Models
 
         [Required]
         public string StatutReservation { get; set; } 
-        [Required]
-        public decimal PrixReservation { get; set; } 
+        public int NbrePassagers { get; set; }
+   
+        public string TypeClasse  { get; set; } // Economy /first/business
+ 
+        public decimal PrixReservationTotal { get; set; }
+        //public string  Doneby{ get; set; } 
+
+
+
     }
 }

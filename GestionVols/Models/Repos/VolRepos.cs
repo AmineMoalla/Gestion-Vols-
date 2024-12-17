@@ -90,25 +90,48 @@ namespace GestionVols.Models.Repos
 
         public async Task<List<Vol>> RechercheVol(RechercheVolRequest request)
         {
-             var query = context.Vols
-                .Include(v => v.AeroportDepart)
+            var query = context.Vols
+                .Include(v => v.AeroportDepart)  
                 .Include(v => v.AeroportArrivee)
+                .Include(v => v.Avion)
                 .AsQueryable();
- 
+
+       
             if (!string.IsNullOrEmpty(request.Depart))
-                query = query.Where(v => v.AeroportDepart.NomAeroport == request.Depart);
+            {
+                query = query.Where(v => v.AeroportDepart.NomAeroport.Contains(request.Depart));
+            }
 
+ 
             if (!string.IsNullOrEmpty(request.Destination))
-                query = query.Where(v => v.AeroportArrivee.NomAeroport == request.Destination);
+            {
+                query = query.Where(v => v.AeroportArrivee.NomAeroport.Contains(request.Destination));
+            }
 
-            if (request.DateDepart.HasValue)
+             if (request.DateDepart.HasValue)
+            {
                 query = query.Where(v => v.HeureDepart.Date == request.DateDepart.Value.Date);
+            }
 
-            if (request.DateRetour.HasValue)
+             if (request.DateRetour.HasValue)
+            {
                 query = query.Where(v => v.HeureArrivee.Date == request.DateRetour.Value.Date);
-  
-            return await query.ToListAsync();
+            }
+
+             if (request.NbreVoyageurs.HasValue)
+            {
+                query = query.Where(v => v.PlacesDisponibles >= request.NbreVoyageurs.Value);
+            }
+             
+            if (!string.IsNullOrEmpty(request.ClassVol))
+            {
+                query = query.Where(v => v.TypeAvion.Equals(request.ClassVol, StringComparison.OrdinalIgnoreCase));
+            }
+             
+            var flights = await query.ToListAsync();
+            return flights;
         }
+
 
 
 
