@@ -13,6 +13,10 @@ namespace GestionVols.Models.Repos
         Task<List<Vol>> GetVolsByAeroportArrivee(int aeroportArriveeId);
         Task<List<Vol>> GetVolsByDate(string dateDepart);
         Task<List<Vol>> RechercheVol(RechercheVolRequest request);
+        Task<Offre> AddOffre(Offre offre);
+        Task<List<Offre>> GetOffres();
+        Task<List<Offre>> GetOffresPourVol(int volId);
+
 
     }
 }

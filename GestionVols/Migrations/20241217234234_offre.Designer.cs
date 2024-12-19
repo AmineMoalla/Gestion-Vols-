@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionVols.Migrations
 {
     [DbContext(typeof(VolDbContext))]
-    [Migration("20241212185845_recuperation")]
-    partial class recuperation
+    [Migration("20241217234234_offre")]
+    partial class offre
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,6 +140,31 @@ namespace GestionVols.Migrations
                     b.ToTable("Avions");
                 });
 
+            modelBuilder.Entity("GestionVols.Models.Offre", b =>
+                {
+                    b.Property<int>("IdOffre")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdOffre"));
+
+                    b.Property<int>("IdVol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomOffre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PourcentageReduction")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("IdOffre");
+
+                    b.HasIndex("IdVol");
+
+                    b.ToTable("Offres");
+                });
+
             modelBuilder.Entity("GestionVols.Models.Passager", b =>
                 {
                     b.Property<int>("IdPassager")
@@ -193,10 +218,17 @@ namespace GestionVols.Migrations
                     b.Property<int>("IdVol")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PrixReservation")
+                    b.Property<int>("NbrePassagers")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrixReservationTotal")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StatutReservation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeClasse")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -242,6 +274,9 @@ namespace GestionVols.Migrations
                     b.Property<string>("Porte")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PrixVol")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Statut")
                         .IsRequired()
@@ -393,6 +428,17 @@ namespace GestionVols.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("GestionVols.Models.Offre", b =>
+                {
+                    b.HasOne("GestionVols.Models.Vol", "Vol")
+                        .WithMany()
+                        .HasForeignKey("IdVol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vol");
                 });
 
             modelBuilder.Entity("GestionVols.Models.Reservation", b =>

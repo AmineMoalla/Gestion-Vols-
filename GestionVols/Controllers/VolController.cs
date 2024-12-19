@@ -8,7 +8,11 @@ namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+<<<<<<< HEAD
    
+=======
+    //[Authorize(Roles = "Admin")]
+>>>>>>> ebd035e90e44e3225161bf286a2c481bd6bc833b
     public class VolController : ControllerBase
     {
         private readonly IVolRepos repos;

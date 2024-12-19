@@ -15,7 +15,7 @@ namespace GestionVols.Models
         public DbSet<Aeroport> Aeroports { get; set; }
         public DbSet<Avion> Avions { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-
+        public DbSet<Offre> Offres { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

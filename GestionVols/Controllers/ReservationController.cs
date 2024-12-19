@@ -8,7 +8,12 @@ namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+<<<<<<< HEAD
      public class ReservationController : ControllerBase
+=======
+    //[Authorize(Roles = "Utilisateur")]
+    public class ReservationController : ControllerBase
+>>>>>>> ebd035e90e44e3225161bf286a2c481bd6bc833b
     {
         private readonly IReservationRepos repos;
 

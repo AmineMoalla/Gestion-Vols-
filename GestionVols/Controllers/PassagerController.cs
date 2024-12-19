@@ -7,7 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
+<<<<<<< HEAD
     [ApiController] 
+=======
+    [ApiController]
+    //[Authorize(Roles = "Admin")]
+>>>>>>> ebd035e90e44e3225161bf286a2c481bd6bc833b
     public class PassagerController : ControllerBase
     {
         private readonly IPassagerRepos repos;
