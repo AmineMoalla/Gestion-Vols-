@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionVols.Migrations
 {
     [DbContext(typeof(VolDbContext))]
-    [Migration("20241212190025_recuperation_data")]
-    partial class recuperation_data
+    [Migration("20241217232331_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,10 +193,17 @@ namespace GestionVols.Migrations
                     b.Property<int>("IdVol")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PrixReservation")
+                    b.Property<int>("NbrePassagers")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrixReservationTotal")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StatutReservation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeClasse")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -242,6 +249,9 @@ namespace GestionVols.Migrations
                     b.Property<string>("Porte")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PrixVol")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Statut")
                         .IsRequired()

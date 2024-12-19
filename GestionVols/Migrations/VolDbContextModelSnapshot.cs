@@ -137,6 +137,31 @@ namespace GestionVols.Migrations
                     b.ToTable("Avions");
                 });
 
+            modelBuilder.Entity("GestionVols.Models.Offre", b =>
+                {
+                    b.Property<int>("IdOffre")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdOffre"));
+
+                    b.Property<int>("IdVol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomOffre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PourcentageReduction")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("IdOffre");
+
+                    b.HasIndex("IdVol");
+
+                    b.ToTable("Offres");
+                });
+
             modelBuilder.Entity("GestionVols.Models.Passager", b =>
                 {
                     b.Property<int>("IdPassager")
@@ -400,6 +425,17 @@ namespace GestionVols.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("GestionVols.Models.Offre", b =>
+                {
+                    b.HasOne("GestionVols.Models.Vol", "Vol")
+                        .WithMany()
+                        .HasForeignKey("IdVol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vol");
                 });
 
             modelBuilder.Entity("GestionVols.Models.Reservation", b =>

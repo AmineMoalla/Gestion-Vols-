@@ -132,6 +132,24 @@ namespace GestionVols.Models.Repos
             return flights;
         }
 
+        public async Task<Offre> AddOffre(Offre offre)
+        {
+            var result = await context.Offres.AddAsync(offre);
+            await context.SaveChangesAsync();
+            return result.Entity;
+        }
+
+        public async Task<List<Offre>> GetOffres()
+        {
+            return await context.Offres.ToListAsync();
+        }
+
+        public async Task<List<Offre>> GetOffresPourVol(int volId)
+        {
+            return await context.Offres
+                .Where(o => o.IdVol == volId)
+                .ToListAsync();
+        }
 
 
 
