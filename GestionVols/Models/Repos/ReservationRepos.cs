@@ -38,6 +38,7 @@ namespace GestionVols.Models.Repos
             reservation.Passager = passager;
             reservation.Vol = vol;
             reservation.PrixReservationTotal = CalculPrixReservationTotal(vol.PrixVol, reservation.TypeClasse, reservation.NbrePassagers);
+            
 
             context.Reservations.Add(reservation);
             await context.SaveChangesAsync();
@@ -67,14 +68,19 @@ namespace GestionVols.Models.Repos
                 await context.SaveChangesAsync();
             }
         }
-
-        public async Task<List<Reservation>> GetHistoriqueReservationByPassager(int idPassager) {
-            return await context.Reservations.Where(r => r.IdPassager == idPassager)
-                        .Include(r => r.Passager)
-                        .Include(r => r.Vol)
-                        .ToListAsync();
-
+        public async Task<List<Reservation>> GetHistoriqueReservationByEmail(string email)
+        {
+            return await context.Reservations
+                .Include(r => r.Passager)
+                .Include(r => r.Vol)
+                    .ThenInclude(v => v.AeroportDepart)  
+                .Include(r => r.Vol)
+                    .ThenInclude(v => v.AeroportArrivee)  
+                .Where(r => r.Passager.EmailPassager.ToLower() == email.ToLower())
+                .ToListAsync();
         }
+
+
 
     }
 }

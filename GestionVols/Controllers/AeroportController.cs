@@ -8,7 +8,7 @@ namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AeroportController : ControllerBase
     {
         private readonly IAeroportRepos repos;

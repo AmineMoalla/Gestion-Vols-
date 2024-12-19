@@ -8,7 +8,7 @@ namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+   
     public class VolController : ControllerBase
     {
         private readonly IVolRepos repos;
@@ -35,6 +35,7 @@ namespace GestionVols.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddVol(Vol vol)
         {
             try
@@ -66,6 +67,7 @@ namespace GestionVols.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Vol vol)
         {
             try
@@ -95,6 +97,7 @@ namespace GestionVols.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -112,8 +115,7 @@ namespace GestionVols.Controllers
             }
         }
 
-        [HttpPost("search")]
-        [AllowAnonymous]  
+        [HttpPost("search")]    
         public async Task<IActionResult> SearchFlights([FromBody] RechercheVolRequest request)
         {
             try

@@ -23,29 +23,87 @@ namespace GestionVols.Controllers
             this.configuration = configuration;
         }
 
+        //[HttpPost("Register")]
+        //public async Task<IActionResult> Register(RegisterDTO registerDTO)
+        //{
+        //    if (!ModelState.IsValid) 
+        //    { return BadRequest(ModelState); }
+
+        //    var user = await userManager.FindByNameAsync(registerDTO.UserName); 
+        //    if (user != null) { 
+        //        return BadRequest("Utilisateur existe"); }
+        //    ApplicationUser applicationUser = new() 
+        //    { UserName = registerDTO.UserName, Email = registerDTO.Email }; 
+        //    var result = await userManager.CreateAsync(applicationUser, registerDTO.Password); 
+        //    if (!result.Succeeded) {
+        //        return BadRequest(result.Errors); } 
+
+
+
+        //    await userManager.AddToRoleAsync(applicationUser, "Utilisateur");
+        //    return Ok(new { message = "Utilisateur créé avec succès" });
+        //    //return Ok("Utilisateur créé avec succès"); 
+        //}
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
-            if (!ModelState.IsValid) 
-            { return BadRequest(ModelState); }
-            
-            var user = await userManager.FindByNameAsync(registerDTO.UserName); 
-            if (user != null) { 
-                return BadRequest("Utilisateur existe"); }
-            ApplicationUser applicationUser = new() 
-            { UserName = registerDTO.UserName, Email = registerDTO.Email }; 
-            var result = await userManager.CreateAsync(applicationUser, registerDTO.Password); 
-            if (!result.Succeeded) {
-                return BadRequest(result.Errors); } 
-            // Ajouter l'utilisateur au rôle "Utilisateur" par défaut
-         
-            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await userManager.FindByNameAsync(registerDTO.UserName);
+            if (user != null)
+            {
+                return BadRequest(new { message = "L'utilisateur existe déjà." });
+            }
+
+            ApplicationUser applicationUser = new()
+            {
+                UserName = registerDTO.UserName,
+                Email = registerDTO.Email
+            };
+
+            var result = await userManager.CreateAsync(applicationUser, registerDTO.Password);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new { message = "Échec de la création de l'utilisateur", errors });
+            }
+
             await userManager.AddToRoleAsync(applicationUser, "Utilisateur");
-            return Ok(new { message = "Utilisateur créé avec succès" });
-            //return Ok("Utilisateur créé avec succès"); 
+             
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, applicationUser.UserName),
+                new Claim(ClaimTypes.NameIdentifier, applicationUser.Id),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, "Utilisateur")
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                issuer: configuration["JWT:issuer"],
+                audience: configuration["JWT:audience"],
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds
+            );
+
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new
+            {
+                message = "Utilisateur créé avec succès",
+                token = jwtToken,
+                username = applicationUser.UserName,
+                email = applicationUser.Email,
+                roles = "Utilisateur"
+            });
         }
 
-            [HttpPost("Login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             if (ModelState.IsValid)
@@ -84,6 +142,7 @@ namespace GestionVols.Controllers
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo,
                             username = loginDTO.UserName,
+                            email = user.Email,
                             roles = roles.FirstOrDefault(), 
                              
                         };

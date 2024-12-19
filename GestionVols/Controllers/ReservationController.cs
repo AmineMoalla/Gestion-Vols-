@@ -8,8 +8,7 @@ namespace GestionVols.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Utilisateur")]
-    public class ReservationController : ControllerBase
+     public class ReservationController : ControllerBase
     {
         private readonly IReservationRepos repos;
 
@@ -114,17 +113,19 @@ namespace GestionVols.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
-        [HttpGet("historique/{passagerId}")]
-        public async Task<IActionResult> GetHistoriqueReservation(int passagerId)
+        [HttpGet("historique/email/{email}")]
+        public async Task<IActionResult> GetHistoriqueReservationByEmail(string email)
         {
-            var reservations = await repos.GetHistoriqueReservationByPassager(passagerId);
+            var reservations = await repos.GetHistoriqueReservationByEmail(email);
             if (reservations == null || !reservations.Any())
             {
-                return NotFound("Aucune réservation trouvée pour ce passager.");
+                return NotFound("Aucune réservation trouvée pour cet utilisateur.");
             }
 
             return Ok(reservations);
         }
+
+
 
     }
 }
